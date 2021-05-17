@@ -53,5 +53,7 @@
 		<File RelativePath=".\m_set_conditions.f90"/>
 		<File RelativePath=".\main.f90"/></Filter>
 		<Filter Name="ヘッダーファイル" Filter="fi;fd;h;inc"/>
-		<Filter Name="リソースファイル" Filter="rc;ico;cur;bmp;dlg;rc2;rct;bin;rgs;gif;jpg;jpeg;jpe"/></Files>
+		<Filter Name="リソースファイル" Filter="rc;ico;cur;bmp;dlg;rc2;rct;bin;rgs;gif;jpg;jpeg;jpe"/>
+		<File RelativePath=".\definition.xml"/>
+		<File RelativePath=".\go.bat"/></Files>
 	<Globals/></VisualStudioProject>

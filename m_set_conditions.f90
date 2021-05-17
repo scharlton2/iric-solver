@@ -11,7 +11,7 @@
     
     
 !======================================================================
-!   CGNSファイルを読み込む
+!   ierチェック＆エラーメッセージ出力
 !======================================================================
     subroutine error_msg(func_name, ier)
     character(len=*) :: func_name
@@ -58,6 +58,7 @@
     allocate (zb(ni, nj), sn(ni, nj))
     call cg_iric_read_grid_real_cell_f('Elevation', zb, ier)
     call error_msg('cg_iric_read_grid_real_cell_f', ier)
+    
     call cg_iric_read_grid_real_cell_f('Manning_n', sn, ier)
     call error_msg('cg_iric_read_grid_real_cell_f', ier)
     
@@ -69,9 +70,16 @@
 !----------------------------------------------------------------------
     !call cg_iric_read_integer_f('i_sec_hour', i_sec_hour, ier)
     call cg_iric_read_real_f('dt', dt, ier)
+    call error_msg('cg_iric_read_real_f:dt', ier)
+    
     call cg_iric_read_real_f('t_start', t_start, ier)
+    call error_msg('cg_iric_read_real_f:t_start', ier)
+    
     call cg_iric_read_real_f('t_end', t_end, ier)
+    call error_msg('cg_iric_read_real_f:t_end', ier)
+    
     call cg_iric_read_real_f('t_output', t_output, ier)
+    call error_msg('cg_iric_read_real_f:t_output', ier)
    
     
     end subroutine
