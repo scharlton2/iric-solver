@@ -39,7 +39,7 @@
 		<Item name="Elevation" caption="Elevation (m)">
 			<Definition position="cell" valueType="real" default="max" />
 		</Item>
-		<Item name="Manning SN" caption="Manning SN">
+		<Item name="ManningSN" caption="Manning SN">
 			<Definition position="cell" valueType="real" default="0.02" />
 		</Item>
 	</GridRelatedCondition>

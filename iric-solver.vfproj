@@ -54,6 +54,7 @@
 		<File RelativePath=".\main.f90"/></Filter>
 		<Filter Name="ヘッダーファイル" Filter="fi;fd;h;inc"/>
 		<Filter Name="リソースファイル" Filter="rc;ico;cur;bmp;dlg;rc2;rct;bin;rgs;gif;jpg;jpeg;jpe"/>
+		<File RelativePath=".\copy.bat"/>
 		<File RelativePath=".\definition.xml"/>
 		<File RelativePath=".\go.bat"/></Files>
 	<Globals/></VisualStudioProject>

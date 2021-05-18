@@ -45,5 +45,7 @@
         
     end do
     
+    write(*,*) "program ends normaly."
+    
     stop
     end program

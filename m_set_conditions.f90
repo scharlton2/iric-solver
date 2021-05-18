@@ -35,12 +35,12 @@
     
     if ( nargs() == 2 ) then
         call getarg(1, condfile, ier)
-        call error_msg('getarg', ier)
+        !call error_msg('getarg', ier)
     else
         write(*,*) 'Error: missing the cgns file as an argument.'
         stop
     endif
-    call cg_open_f(condfile, CG_MODE_MODIFY, fid, ier)
+    call cg_open_f(trim(condfile), CG_MODE_MODIFY, fid, ier)
     call error_msg('cg_open_f', ier)
     call cg_iric_init_f(fid, ier)
     call error_msg('cg_iric_init_f', ier)
@@ -55,12 +55,12 @@
     call cg_iric_getgridcoord2d_f(xx, yy, ier)
     call error_msg('cg_iric_getgridcoord2d_f', ier)
     
-    allocate (zb(ni, nj), sn(ni, nj))
+    allocate (zb(ni-1, nj-1), sn(ni-1, nj-1))
     call cg_iric_read_grid_real_cell_f('Elevation', zb, ier)
-    call error_msg('cg_iric_read_grid_real_cell_f', ier)
+    call error_msg('cg_iric_read_grid_real_cell_f:Elevation', ier)
     
-    call cg_iric_read_grid_real_cell_f('Manning_n', sn, ier)
-    call error_msg('cg_iric_read_grid_real_cell_f', ier)
+    call cg_iric_read_grid_real_cell_f('ManningSN', sn, ier)
+    call error_msg('cg_iric_read_grid_real_cell_f:Manning_SN', ier)
     
     
     !call cg_iric_read_grid_real_node_f('Elevation', z8, ier)
