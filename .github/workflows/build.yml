@@ -30,6 +30,14 @@ jobs:
     steps:
     - uses: actions/checkout@v2
     
+    - name: Download latest iricsdk
+      shell: cmd
+      run: |
+        curl -L -O %IRICSDK_URL%
+        mkdir c:\iricdev\lib
+        7z x -oC:\iricdev\lib iricsdk.zip
+        del iricsdk.zip
+    
     - name: Install oneAPI Fortran
       shell: cmd
       # if: steps.cache-oneapi.outputs.cache-hit != 'true'
@@ -37,15 +45,6 @@ jobs:
         curl -fSLo %WINDOWS_HPCKIT_FILE% %WINDOWS_HPCKIT_URL%
         start /b /wait %WINDOWS_HPCKIT_FILE% -s -x -f hpckit_extracted --log hpckit_extracted.log
         hpckit_extracted\bootstrapper.exe -s --action install --components=%WINDOWS_HPCKIT_COMPONENTS% --eula=accept --continue-with-optional-error=yes -p=NEED_VS2017_INTEGRATION=0 -p=NEED_VS2019_INTEGRATION=1 --log-dir=.
-
-    - name: Download latest iricsdk
-      # Configure CMake in a 'build' subdirectory. `CMAKE_BUILD_TYPE` is only required if you are using a single-configuration generator such as make.
-      # See https://cmake.org/cmake/help/latest/variable/CMAKE_BUILD_TYPE.html?highlight=cmake_build_type
-      run: |
-        curl -L -O %IRICSDK_URL%
-        mkdir c:\iricdev\lib
-        7z x -oC:\iricdev\lib iricsdk.zip
-        del iricsdk.zip
 
     - name: Configure CMake
       # Configure CMake in a 'build' subdirectory. `CMAKE_BUILD_TYPE` is only required if you are using a single-configuration generator such as make.
