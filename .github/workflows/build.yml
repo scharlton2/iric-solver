@@ -1,0 +1,56 @@
+name: build
+
+on:
+  push:
+    branches: [ cgns ]
+
+env:
+  # Customize the CMake build type here (Release, Debug, RelWithDebInfo, etc.)
+  BUILD_TYPE: RelWithDebInfo
+  #
+  IRICSDK_VER: 0.2.9
+  IRICSDK_URL: https://github.com/scharlton2/iriclib/releases/download/v%IRICSDK_VER%/iricsdk.zip
+  IRICSDK_PREFIX_PATH: C:/iricdev/lib/install/iriclib-%IRICSDK_VER%/lib/cmake/iriclib
+  # Based on https://github.com/oneapi-src/oneapi-ci/blob/master/.github/workflows/build_all.yml
+  WINDOWS_BASEKIT_URL: https://registrationcenter-download.intel.com/akdlm/irc_nas/17768/w_BaseKit_p_2021.2.0.2871.exe
+  WINDOWS_BASEKIT_FILE: basekit.exe
+  WINDOWS_BASEKIT_COMPONENTS: intel.oneapi.win.dpcpp-compiler
+  WINDOWS_HPCKIT_URL: https://registrationcenter-download.intel.com/akdlm/irc_nas/17762/w_HPCKit_p_2021.2.0.2901.exe
+  WINDOWS_HPCKIT_FILE: hpckit.exe
+  WINDOWS_HPCKIT_COMPONENTS: intel.oneapi.win.ifort-compiler
+
+jobs:
+  build:
+    # The CMake configure and build commands are platform agnostic and should work equally
+    # well on Windows or Mac.  You can convert this to a matrix build if you need
+    # cross-platform coverage.
+    # See: https://docs.github.com/en/free-pro-team@latest/actions/learn-github-actions/managing-complex-workflows#using-a-build-matrix
+    runs-on: windows-latest
+
+    steps:
+    - uses: actions/checkout@v2
+    
+    - name: Install oneAPI Fortran
+      shell: cmd
+      # if: steps.cache-oneapi.outputs.cache-hit != 'true'
+      run: |
+        curl -fSLo %WINDOWS_HPCKIT_FILE% %IRICSDK_URL%
+        start /b /wait %WINDOWS_HPCKIT_FILE% -s -x -f hpckit_extracted --log hpckit_extracted.log
+        hpckit_extracted\bootstrapper.exe -s --action install --components=%WINDOWS_HPCKIT_COMPONENTS% --eula=accept --continue-with-optional-error=yes -p=NEED_VS2017_INTEGRATION=0 -p=NEED_VS2019_INTEGRATION=1 --log-dir=.
+
+    - name: Download latest iricsdk
+      # Configure CMake in a 'build' subdirectory. `CMAKE_BUILD_TYPE` is only required if you are using a single-configuration generator such as make.
+      # See https://cmake.org/cmake/help/latest/variable/CMAKE_BUILD_TYPE.html?highlight=cmake_build_type
+      run: |
+        curl -L -O %IRICSDK_URL%
+        mkdir c:\iricdev\lib
+        7z x -oC:\iricdev\lib iricsdk.zip
+
+    - name: Configure CMake
+      # Configure CMake in a 'build' subdirectory. `CMAKE_BUILD_TYPE` is only required if you are using a single-configuration generator such as make.
+      # See https://cmake.org/cmake/help/latest/variable/CMAKE_BUILD_TYPE.html?highlight=cmake_build_type
+      run: cmake -B ${{github.workspace}}/_build -DCMAKE_BUILD_TYPE=${{env.BUILD_TYPE}} -DCMAKE_PREFIX_PATH=${{env.IRICSDK_PREFIX_PATH}}
+
+    - name: Build
+      # Build your program with the given configuration
+      run: cmake --build ${{github.workspace}}/_build --config ${{env.BUILD_TYPE}}
