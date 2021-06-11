@@ -9,8 +9,8 @@ env:
   BUILD_TYPE: RelWithDebInfo
   #
   IRICSDK_VER: 0.2.9
-  IRICSDK_URL: https://github.com/scharlton2/iriclib/releases/download/v%IRICSDK_VER%/iricsdk.zip
-  IRICSDK_PREFIX_PATH: C:/iricdev/lib/install/iriclib-%IRICSDK_VER%/lib/cmake/iriclib
+  IRICSDK_URL: https://github.com/scharlton2/iriclib/releases/download/v0.2.9/iricsdk.zip
+  IRICSDK_PREFIX_PATH: C:/iricdev/lib/install/iriclib-0.2.9/lib/cmake/iriclib
   # Based on https://github.com/oneapi-src/oneapi-ci/blob/master/.github/workflows/build_all.yml
   WINDOWS_BASEKIT_URL: https://registrationcenter-download.intel.com/akdlm/irc_nas/17768/w_BaseKit_p_2021.2.0.2871.exe
   WINDOWS_BASEKIT_FILE: basekit.exe
@@ -34,11 +34,7 @@ jobs:
       shell: cmd
       # if: steps.cache-oneapi.outputs.cache-hit != 'true'
       run: |
-        where curl
-        where 7z
-        where cmake
-        echo curl -fSLo %WINDOWS_HPCKIT_FILE% %IRICSDK_URL%
-        curl -fSLo %WINDOWS_HPCKIT_FILE% %IRICSDK_URL%
+        curl -fSLo %WINDOWS_HPCKIT_FILE% %WINDOWS_HPCKIT_URL%
         start /b /wait %WINDOWS_HPCKIT_FILE% -s -x -f hpckit_extracted --log hpckit_extracted.log
         hpckit_extracted\bootstrapper.exe -s --action install --components=%WINDOWS_HPCKIT_COMPONENTS% --eula=accept --continue-with-optional-error=yes -p=NEED_VS2017_INTEGRATION=0 -p=NEED_VS2019_INTEGRATION=1 --log-dir=.
 
@@ -49,6 +45,7 @@ jobs:
         curl -L -O %IRICSDK_URL%
         mkdir c:\iricdev\lib
         7z x -oC:\iricdev\lib iricsdk.zip
+        del iricsdk.zip
 
     - name: Configure CMake
       # Configure CMake in a 'build' subdirectory. `CMAKE_BUILD_TYPE` is only required if you are using a single-configuration generator such as make.
