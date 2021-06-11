@@ -34,6 +34,10 @@ jobs:
       shell: cmd
       # if: steps.cache-oneapi.outputs.cache-hit != 'true'
       run: |
+        where curl
+        where 7z
+        where cmake
+        echo curl -fSLo %WINDOWS_HPCKIT_FILE% %IRICSDK_URL%
         curl -fSLo %WINDOWS_HPCKIT_FILE% %IRICSDK_URL%
         start /b /wait %WINDOWS_HPCKIT_FILE% -s -x -f hpckit_extracted --log hpckit_extracted.log
         hpckit_extracted\bootstrapper.exe -s --action install --components=%WINDOWS_HPCKIT_COMPONENTS% --eula=accept --continue-with-optional-error=yes -p=NEED_VS2017_INTEGRATION=0 -p=NEED_VS2019_INTEGRATION=1 --log-dir=.
